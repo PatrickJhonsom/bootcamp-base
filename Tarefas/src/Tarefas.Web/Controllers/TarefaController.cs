@@ -59,7 +59,10 @@ namespace Tarefas.Web.Controllers
 
         public IActionResult Create()
         {
+            if(!ModelState.IsValid)
+             {
             return View();
+             }
         }
 
         [HttpPost]

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
+using System.ComponentModel.DataAnnotations;
 namespace Tarefas.Web.Models;
 
 public class TarefaViewModel
@@ -9,7 +10,7 @@ public class TarefaViewModel
     
     [DisplayName("Título")]    
     public string? Titulo { get; set; }        
-    
+    [Required]
     [DisplayName("Descrição")]    
     public string? Descricao { get; set; }  
 
