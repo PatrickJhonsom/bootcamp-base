@@ -6,28 +6,55 @@ using Tarefas.DAO;
 namespace Tarefas.Web.Controllers
 {
     public class TarefaController : Controller
-    {
-        public List<Tarefa> listaDeTarefas { get; set; }
+    {   
+        private TarefaDAO tarefaDAO;
+        public List<TarefaViewModel> listaDeTarefas { get; set; }
 
         public TarefaController()
         {
-            listaDeTarefas = new List<Tarefa>()
+            tarefaDAO = new TarefaDAO();
+            listaDeTarefas = new List<TarefaViewModel>()
             {
-                new Tarefa() { Id = 1, Titulo = "Escovar os dentes" },
-                new Tarefa() { Id = 2, Titulo = "Arrumar a cama" },
-                new Tarefa() { Id = 3, Titulo = "Por o lixo para fora", Descricao = "somente às terças, quintas e sábados" }
+                new TarefaViewModel() { Id = 1, Titulo = "Escovar os dentes" },
+                new TarefaViewModel() { Id = 2, Titulo = "Arrumar a cama" },
+                new TarefaViewModel() { Id = 3, Titulo = "Por o lixo para fora", Descricao = "somente às terças, quintas e sábados" }
             };
         }
         
         public IActionResult Details(int id)
         {
-            var tarefa = listaDeTarefas.Find(tarefa => tarefa.Id == id);
-            return View(tarefa);
+            
+            var tarefaDTO = tarefaDAO.Consultar(id);
+            
+            var tarefa= new TarefaViewModel(){
+                    Id = tarefaDTO.Id,
+                    Titulo = tarefaDTO.Titulo,
+                    Descricao = tarefaDTO.Descricao,
+                    Concluida = tarefaDTO.Concluida
+            };
+           return View(tarefa);
+           // RedirectToAction("index");
         }
 
         public IActionResult Index()
         {            
-            return View(listaDeTarefas);
+           
+           var listaDeTarefasDTO = tarefaDAO.Consultar();
+
+           var listaDeTarefa = new List<TarefaViewModel>();
+
+           foreach (var tarefaDTO in listaDeTarefasDTO)
+             {
+                listaDeTarefa.Add(new TarefaViewModel()
+                {
+                    Id = tarefaDTO.Id,
+                    Titulo = tarefaDTO.Titulo,
+                    Descricao = tarefaDTO.Descricao,
+                    Concluida = tarefaDTO.Concluida
+
+                });
+             }
+            return View(listaDeTarefa);
         }
 
         public IActionResult Create()
@@ -36,7 +63,7 @@ namespace Tarefas.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Tarefa tarefa)
+        public IActionResult Create(TarefaViewModel tarefa)
         {
             var tarefaDTO = new TarefaDTO 
             {
@@ -44,11 +71,49 @@ namespace Tarefas.Web.Controllers
                 Descricao = tarefa.Descricao,
                 Concluida = tarefa.Concluida
             };
-
-            var tarefaDAO = new TarefaDAO();
             tarefaDAO.Criar(tarefaDTO);
 
-            return View();
+            
+            return RedirectToAction("index");
         }
+
+        [HttpPost]
+        public IActionResult Update(TarefaViewModel tarefa)
+        {
+            var tarefaDTO = new TarefaDTO 
+            {   
+                Id     = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Concluida = tarefa.Concluida
+            };
+
+            tarefaDAO.Atualizar(tarefaDTO);
+
+            
+            return RedirectToAction("index");
+        }
+
+     
+        public IActionResult Update(int id)
+        {
+            var tarefaDTO = tarefaDAO.Consultar(id);
+            
+            var tarefa = new TarefaViewModel()
+            {   Id = tarefaDTO.Id,
+                Titulo = tarefaDTO.Titulo,
+                Descricao = tarefaDTO.Descricao,
+                Concluida = tarefaDTO.Concluida
+            };
+            return   View(tarefa);
+        }        
+        public IActionResult Delete (int id)
+        {
+                        
+            tarefaDAO.Delete(id);
+
+            
+            return RedirectToAction("index");
+        }        
     }
 }

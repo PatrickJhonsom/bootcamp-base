@@ -1,14 +1,14 @@
-@model Tarefas.Web.Models.Tarefa
+@model Tarefas.Web.Models.TarefaViewModel
 
 <form asp-action="Create">
 
    <div class="form-group">
-        <label asp-for="Titulo">@Html.DisplayNameFor(model => model.Titulo)</label>
+        <label asp-for="Titulo" disable>@Html.DisplayNameFor(model => model.Titulo) </label>
         @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control", @readonly = "true" })
     </div>
 
     <div class="form-group">
-        <label asp-for="Descricao">@Html.DisplayNameFor(model => model.Descricao)</label>
+        <label asp-for="Descricao" disable>@Html.DisplayNameFor(model => model.Descricao)</label>
         @Html.TextAreaFor(model => model.Descricao, new { @class = "form-control", @readonly = "true" })
     </div>
         
