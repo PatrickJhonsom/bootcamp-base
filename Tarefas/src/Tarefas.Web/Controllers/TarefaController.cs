@@ -59,10 +59,8 @@ namespace Tarefas.Web.Controllers
 
         public IActionResult Create()
         {
-            if(!ModelState.IsValid)
-             {
             return View();
-             }
+         
         }
 
         [HttpPost]
@@ -74,6 +72,10 @@ namespace Tarefas.Web.Controllers
                 Descricao = tarefa.Descricao,
                 Concluida = tarefa.Concluida
             };
+           if(!ModelState.IsValid)
+             {
+            return View();
+             }
             tarefaDAO.Criar(tarefaDTO);
 
             
@@ -90,7 +92,10 @@ namespace Tarefas.Web.Controllers
                 Descricao = tarefa.Descricao,
                 Concluida = tarefa.Concluida
             };
-
+            if(!ModelState.IsValid)
+             {
+            return View();
+             }
             tarefaDAO.Atualizar(tarefaDTO);
 
             

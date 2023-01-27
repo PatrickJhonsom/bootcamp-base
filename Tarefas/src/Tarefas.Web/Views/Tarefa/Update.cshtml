@@ -1,10 +1,15 @@
 @model Tarefas.Web.Models.TarefaViewModel
 
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 <form asp-action="Update">
-
+@Html.ValidationSummary()
 <input asp-asp-for="Id" hidden/>
 <input asp-asp-for="Concluida" hidden/>
-
 
     <div class="form-group">
         <label asp-for="Titulo">@Html.DisplayNameFor(model => model.Titulo)</label>
